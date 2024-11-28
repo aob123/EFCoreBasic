@@ -35,9 +35,8 @@ foreach (var record in records)
         counter++;
         if (success)
         {
-            
             // Console.WriteLine($"Parsed successfully: {result}");
-            System.Console.WriteLine($"#{counter} || {record.Datum} | {record.Plats} | {result} | {record.Luftfuktighet}");
+            // System.Console.WriteLine($"#{counter} || {record.Datum} | {record.Plats} | {result} | {record.Luftfuktighet}");
             insertData(record.Datum, record.Plats, result, record.Luftfuktighet);
         }
         else
@@ -48,7 +47,7 @@ foreach (var record in records)
  
 }
 
-// insertProduct();
+
 // readProduct();
 
 // static void readProduct()
@@ -70,23 +69,14 @@ static void insertData(DateTime date, string location, decimal temp, int hum)
     data.Temp = temp;
     data.Luftfuktighet = hum;
 
-    db.Add(data);
-    db.SaveChanges();
+    if (!db.WeatherData.Contains(data))
+    {
+        db.Add(data);
+        db.SaveChanges();
+    }
+    else 
+    {
+        System.Console.WriteLine("Record already exists");
+    }
+
 }
-
-// static void insertProduct()
-// {
-//     using var db = new EFContext();
-//     Products product = new Products();
-//     product.Name = "Pen drive";
-//     db.Add(product);
-
-//     product = new Products
-//     {
-//         Name = "Memory card"
-//     };
-
-//     db.Add(product);
-//     db.SaveChanges();
-//     return;
-// }

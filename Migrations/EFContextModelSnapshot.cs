@@ -24,25 +24,19 @@ namespace EFCoreBasic.Migrations
 
             modelBuilder.Entity("EFCOREBASIC.Models.WeatherData", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
                     b.Property<DateTime>("Datum")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Plats")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Luftfuktighet")
                         .HasColumnType("int");
 
-                    b.Property<string>("Plats")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Temp")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Datum", "Plats", "Luftfuktighet");
 
                     b.ToTable("WeatherData");
                 });

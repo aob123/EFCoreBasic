@@ -10,7 +10,6 @@ public class WeatherModel
 
     public string? Plats {get; set;}
 
-    // [TypeConverter(typeof(DecimalConverter))]
     public string? Temp {get; set;}
 
     public int Luftfuktighet {get; set;}

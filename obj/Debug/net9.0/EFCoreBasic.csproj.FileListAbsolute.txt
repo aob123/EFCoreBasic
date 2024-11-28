@@ -145,3 +145,4 @@
 /Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/obj/Debug/net9.0/EFCoreBasic.genruntimeconfig.cache
 /Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/obj/Debug/net9.0/ref/EFCoreBasic.dll
 /Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/bin/Debug/net9.0/CsvHelper.dll
+/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/obj/Debug/net9.0/EFCoreBasic.sourcelink.json
