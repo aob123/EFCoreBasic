@@ -3,6 +3,7 @@ using EFCOREBASIC.Models;
 
 using CsvHelper;
 using System.Globalization;
+using System.Data.Common;
 
 string inputFile = "./TempFuktData.csv";
 List<WeatherModel> outputRecords = new();
@@ -11,7 +12,8 @@ using var reader = new StreamReader(inputFile);
 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
 var records = csv.GetRecords<WeatherModel>();
-int counter = 0;
+
+
 
 foreach (var record in records)
 {
@@ -32,7 +34,7 @@ foreach (var record in records)
 
         // Parse the string
         bool success = decimal.TryParse(record.Temp, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, format, out decimal result);
-        counter++;
+        // counter++;
         if (success)
         {
             // Console.WriteLine($"Parsed successfully: {result}");
@@ -50,18 +52,25 @@ foreach (var record in records)
 
 // readProduct();
 
-// static void readProduct()
-// {
-//     using var db = new EFContext();
-//     List<WeatherData> datas = db.WeatherData.ToList();
-//     foreach (WeatherData d in datas)
-//     {
-//         Console.WriteLine($"ID: {d.Datum} | Name: {d.Plats}");
-//     }
-//     return;
-// }
+static void readProduct()
+{
+    using var db = new EFContext();
+    List<WeatherData> data = db.WeatherData.ToList();
+
+    foreach (WeatherData d in data)
+    {
+        // Console.WriteLine($"ID: {d.Datum} | Name: {d.Plats}");
+        System.Console.WriteLine($"{d.Datum} | {d.Plats} | {d.Datum} | {d.Luftfuktighet}");
+
+    }
+    return;
+}
+
 static void insertData(DateTime date, string location, decimal temp, int hum)
 {
+
+    
+
     using var db = new EFContext();
     WeatherData data = new WeatherData();
     data.Datum = date;
@@ -73,10 +82,19 @@ static void insertData(DateTime date, string location, decimal temp, int hum)
     {
         db.Add(data);
         db.SaveChanges();
+        Console.Write($"Record Added -- {data.Datum} | {data.Plats} | {data.Temp} | {data.Luftfuktighet}");
     }
     else 
     {
-        System.Console.WriteLine("Record already exists");
+
+        List<WeatherData> dataList = db.WeatherData.ToList();
+        for (int i=0; i <= dataList.Count; i++)
+        {
+            Console.Write("\r Record {0} of {1} already exists", i, dataList.Count);
+            Thread.Sleep(10);
+        }
     }
 
 }
+
+
