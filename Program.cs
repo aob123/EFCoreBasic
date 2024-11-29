@@ -17,7 +17,7 @@ namespace EFCoreBasic
             var context = new EFContext();
             context.Database.Migrate();
             MenuUI.ShowMainMenu();
-            MenuUI.HandleMenuSelection();
+            // MenuUI.HandleMenuSelection();
         }
 
         
