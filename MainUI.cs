@@ -44,7 +44,6 @@ namespace EFCoreBasic
             }
         }
 
-
         private static void ShowWeatherData()
         {
             Console.Clear();
