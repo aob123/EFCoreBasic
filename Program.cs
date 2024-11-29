@@ -18,6 +18,8 @@ namespace EFCoreBasic
             context.Database.Migrate();
             MenuUI.ShowMainMenu();
             MenuUI.HandleMenuSelection();
+
+
         }
 
         

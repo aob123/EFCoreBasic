@@ -60,7 +60,8 @@ namespace EFCoreBasic
         {
             Console.Clear();
             Console.WriteLine("Sorterar väderdata efter temperatur:");
-            DataMethods.IndoorData();
+            // DataMethods.IndoorData();
+            DataMethods.IndoorMediumTemp("Inne");
             // anropa logik för att sortera och visa väderdata baserat på temperatur
             // Ex:
             // SortWeatherDataByTemperature();
@@ -72,7 +73,7 @@ namespace EFCoreBasic
         {
             Console.Clear();
             Console.WriteLine("Sorterar väderdata efter luftfuktighet:");
-            DataMethods.OutdoorData();
+            DataMethods.IndoorMediumTemp("Ute");
             // anropa logik för att sortera och visa väderdata baserat på luftfuktighet
             // Ex:
             // SortWeatherDataByHumidity();

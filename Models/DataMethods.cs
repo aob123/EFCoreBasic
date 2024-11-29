@@ -73,10 +73,11 @@ namespace EFCoreBasic
         {
             using var db = new EFContext();
             List<WeatherData> data = db.WeatherData.ToList();
-
+            int counter = 0;
             foreach (WeatherData d in data)
             {
-                Console.WriteLine($"{d.Datum} | {d.Plats} | {d.Temp} | {d.Luftfuktighet}");
+                counter ++;
+                Console.WriteLine($"{counter} {d.Datum} | {d.Plats} | {d.Temp} | {d.Luftfuktighet}");
             }
         }
 
@@ -89,6 +90,7 @@ namespace EFCoreBasic
 
                 foreach( WeatherData d in data)
                 {
+                    
                     Console.WriteLine($"{d.Datum} | {d.Plats} | {d.Temp} | {d.Luftfuktighet}");
                 }
             }
@@ -100,11 +102,44 @@ namespace EFCoreBasic
             using (var context = new EFContext())
             {
                 var data = context.WeatherData.Where(d => d.Plats.Contains("Ute")).ToList();
+                
 
                 foreach( WeatherData d in data)
                 {
                     Console.WriteLine($"{d.Datum} | {d.Plats} | {d.Temp} | {d.Luftfuktighet}");
                 }
+            }
+        }
+
+        public static void IndoorMediumTemp(string plats)
+        {
+            using (var context = new EFContext())
+            {
+                // var startDate = DateTime.ParseExact("2016/10/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                // var endDate = DateTime.ParseExact("2016/10/02", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                
+
+                var data = context.WeatherData.Where(d => d.Plats.Contains(plats) && d.Datum >= startDate && d.Datum <= endDate).ToList();
+
+                decimal addedTemp = 0;
+                List<decimal> temps = [];
+                int counter = 0;
+
+                foreach (WeatherData d in data)
+                {
+
+                    var startDate = DateTime.ParseExact(d.Temp.ToString(), "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                    var endDate = DateTime.ParseExact(d.Temp.ToString(), "yyyy/MM/dd", CultureInfo.InvariantCulture);
+
+                    temps.Add(d.Temp);
+
+                    // Console.WriteLine($"{d.Datum} {d.Temp}" );
+                }
+
+                System.Console.WriteLine(temps.Count);
+                decimal mediumTemp = addedTemp / counter;
+                Console.WriteLine("Medeltemperaturen för dagen är " + mediumTemp);
+                Console.ReadKey();
             }
         }
 
