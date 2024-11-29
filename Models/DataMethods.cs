@@ -98,8 +98,42 @@ namespace EFCoreBasic
         {
             using (var context = new EFContext())
             {
-                var startDate = DateTime.ParseExact("2016/10/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
-                var endDate = DateTime.ParseExact("2016/10/02", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                Console.Write("Please type in the number for the month that you'd like to use [October/November]: ");
+                int month = int.Parse(Console.ReadLine());
+                int endMonth = month;
+                if (month < 10 || month > 11)
+                {
+                    Console.WriteLine("Invalid input");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return;
+                }
+
+                Console.Write("Please type in the number for the day that you'd like to use [1-31/1-30]: ");
+                int day = int.Parse(Console.ReadLine());
+                int endDay = day + 1;
+                if (month == 10 && day > 31 || month == 11 && day > 30)
+                {
+                    Console.WriteLine("Invalid input");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return;
+                }
+                else if (month == 10 && day == 31)
+                {
+                    endDay = 1;
+                    endMonth = 11;
+                }
+
+                string monthString = month.ToString();
+                string dayString = day.ToString();
+                string endMonthString = endMonth.ToString();
+                string endDayString = endDay.ToString();
+                string chosenDate = "2016/" + monthString + "/" + dayString;
+                string chosenEndDate = "2016/" + endMonthString + "/" + endDayString;
+
+                var startDate = DateTime.ParseExact(chosenDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                var endDate = DateTime.ParseExact(chosenEndDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
 
                 var data = context.WeatherData.Where(d => d.Plats.Contains("Inne") && d.Datum >= startDate && d.Datum <= endDate).ToList();
 
@@ -113,8 +147,7 @@ namespace EFCoreBasic
                 }
 
                 decimal mediumTemp = addedTemp / counter;
-                Console.WriteLine("Medeltemperaturen för dagen är " + mediumTemp);
-                Console.WriteLine(counter + " " + addedTemp);
+                Console.WriteLine("Medeltemperaturen för " + chosenDate + " är " + mediumTemp);
                 Console.ReadKey();
             }
         }
