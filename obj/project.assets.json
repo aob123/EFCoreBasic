@@ -4722,25 +4722,31 @@
     ]
   },
   "packageFolders": {
-    "/Users/alexanderbeswick/.nuget/packages/": {}
+    "C:\\Users\\alexh\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/EFCoreBasic.csproj",
+      "projectUniqueName": "C:\\Users\\alexh\\Source\\Repos\\EFCoreBasic\\EFCoreBasic.csproj",
       "projectName": "EFCoreBasic",
-      "projectPath": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/EFCoreBasic.csproj",
-      "packagesPath": "/Users/alexanderbeswick/.nuget/packages/",
-      "outputPath": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/obj/",
+      "projectPath": "C:\\Users\\alexh\\Source\\Repos\\EFCoreBasic\\EFCoreBasic.csproj",
+      "packagesPath": "C:\\Users\\alexh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\alexh\\Source\\Repos\\EFCoreBasic\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/alexanderbeswick/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\alexh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4800,7 +4806,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

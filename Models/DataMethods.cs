@@ -8,9 +8,9 @@ namespace EFCoreBasic
     {
 
         //Loads data from CSV to DB
-        static void AddWeatherData()
+        public static void AddWeatherData()
         {
-            string inputFile = "./TempFuktData.csv";
+            string inputFile = "C:\\Users\\alexh\\Source\\Repos\\EFCoreBasic\\TempFuktData.csv";
             List<WeatherModel> outputRecords = new List<WeatherModel>();
 
             using var reader = new StreamReader(inputFile);
@@ -91,6 +91,31 @@ namespace EFCoreBasic
                 {
                     Console.WriteLine($"{d.Datum} | {d.Plats} | {d.Temp} | {d.Luftfuktighet}");
                 }
+            }
+        }
+
+        public static void IndoorMediumTemp()
+        {
+            using (var context = new EFContext())
+            {
+                var startDate = DateTime.ParseExact("2016/10/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                var endDate = DateTime.ParseExact("2016/10/02", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+
+                var data = context.WeatherData.Where(d => d.Plats.Contains("Inne") && d.Datum >= startDate && d.Datum <= endDate).ToList();
+
+                decimal addedTemp = 0;
+                int counter = 0;
+
+                foreach (WeatherData d in data)
+                {
+                    addedTemp += d.Temp;
+                    counter++;
+                }
+
+                decimal mediumTemp = addedTemp / counter;
+                Console.WriteLine("Medeltemperaturen för dagen är " + mediumTemp);
+                Console.WriteLine(counter + " " + addedTemp);
+                Console.ReadKey();
             }
         }
 
