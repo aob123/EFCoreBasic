@@ -4722,27 +4722,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\magnu\\.nuget\\packages\\": {}
+    "/Users/alexanderbeswick/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\magnu\\source1\\EFCoreBasic.csproj",
+      "projectUniqueName": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/EFCoreBasic.csproj",
       "projectName": "EFCoreBasic",
-      "projectPath": "C:\\Users\\magnu\\source1\\EFCoreBasic.csproj",
-      "packagesPath": "C:\\Users\\magnu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\magnu\\source1\\obj\\",
+      "projectPath": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/EFCoreBasic.csproj",
+      "packagesPath": "/Users/alexanderbeswick/.nuget/packages/",
+      "outputPath": "/Users/alexanderbeswick/Documents/Dev/studies/Systemutvecklare DevSecOps/4. Databashantering SQL/EF/EFCoreBasic/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\magnu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/alexanderbeswick/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4760,7 +4758,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "all"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -4796,18 +4795,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.Net.Sdk.Compilers.Toolset",
-            "version": "[9.0.100, 9.0.100]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
