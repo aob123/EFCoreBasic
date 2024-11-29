@@ -14,11 +14,10 @@ namespace EFCoreBasic
         {
             Console.Clear();
             Console.WriteLine("Välj ett alternativ:");
-            Console.WriteLine("1. Lägg till väderdata");
-            Console.WriteLine("2. Visa väderdata");
-            Console.WriteLine("3. Sortera väderdata efter temperatur");
-            Console.WriteLine("4. Sortera väderdata efter luftfuktighet");
-            Console.WriteLine("5. Avsluta");
+            Console.WriteLine("1. Visa väderdata");
+            Console.WriteLine("2. Sortera väderdata efter temperatur");
+            Console.WriteLine("3. Sortera väderdata efter luftfuktighet");
+            Console.WriteLine("4. Avsluta");
         }
 
         public static void HandleMenuSelection()
@@ -28,18 +27,15 @@ namespace EFCoreBasic
             switch (userChoice)
             {
                 case "1":
-                    AddWeatherData();
-                    break;
-                case "2":
                     ShowWeatherData();
                     break;
-                case "3":
+                case "2":
                     SortDataByTemperature();
                     break;
-                case "4":
+                case "3":
                     SortDataByHumidity();
                     break;
-                case "5":
+                case "4":
                     ExitProgram();
                     break;
                 default:
@@ -48,19 +44,6 @@ namespace EFCoreBasic
             }
         }
 
-        private static void AddWeatherData()
-        {
-            Console.Clear();
-            Console.WriteLine("Lägg till ny väderdata");
-
-            // (Datum, Plats, Temperatur, Luftfuktighet)
-            // sedan anropa insertData metod
-            // Ex:
-            // insertData(DateTime.Now, "Stockholm", 10.5m, 75);
-
-            Console.WriteLine("Data har lagts till.");
-            GoBackToMenu();
-        }
 
         private static void ShowWeatherData()
         {
