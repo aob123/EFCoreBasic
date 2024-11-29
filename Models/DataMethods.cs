@@ -94,6 +94,7 @@ namespace EFCoreBasic
             }
         }
 
+        //Get outdoor data
         public static void OutdoorData()
         {
             using (var context = new EFContext())
@@ -106,6 +107,8 @@ namespace EFCoreBasic
                 }
             }
         }
+
+        
     }
 
 }
