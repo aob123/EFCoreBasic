@@ -9,7 +9,10 @@ namespace EFCoreBasic
         // Loads data from CSV to DB
         public static void AddWeatherData()
         {
-            string inputFile = "./TempFuktData.csv";
+            //string inputFile = "./TempFuktData.csv";
+            string inputFile = "C:\\Users\\magnu\\source1\\TempFuktData.csv";
+            // var read = new StreamReader("C:\\Users\\magnu\\source1\\TempFuktData.csv");
+
 
             try
             {
@@ -43,7 +46,7 @@ namespace EFCoreBasic
                     }
                 }
 
-                Console.WriteLine("Data importerad framgångsrikt.");
+                Console.WriteLine("Data importerad.");
             }
             catch (Exception ex)
             {

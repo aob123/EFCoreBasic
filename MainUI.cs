@@ -57,15 +57,19 @@ namespace EFCoreBasic
                 {
                     case "1":
                         DataMethods.GetAverageTemperature(true);
+                        Console.ReadKey();
                         break;
                     case "2":
                         DataMethods.SortByTemperature(true);
+                        Console.ReadKey();
                         break;
                     case "3":
                         DataMethods.SortByHumidity(true);
+                        Console.ReadKey();
                         break;
                     case "4":
                         DataMethods.SortByMoldRisk(true);
+                        Console.ReadKey();
                         break;
                     case "5":
                         return;
@@ -96,21 +100,27 @@ namespace EFCoreBasic
                 {
                     case "1":
                         DataMethods.GetAverageTemperature(false);
+                        Console.ReadKey();
                         break;
                     case "2":
                         DataMethods.SortByTemperature(false);
+                        Console.ReadKey();
                         break;
                     case "3":
                         DataMethods.SortByHumidity(false);
+                        Console.ReadKey();
                         break;
                     case "4":
                         DataMethods.SortByMoldRisk(false);
+                        Console.ReadKey();
                         break;
                     case "5":
                         DataMethods.GetAutumnDate();
+                        Console.ReadKey();
                         break;
                     case "6":
                         DataMethods.GetWinterDate();
+                        Console.ReadKey();
                         break;
                     case "7":
                         return;
@@ -136,7 +146,8 @@ namespace EFCoreBasic
             Console.Clear();
             Console.WriteLine("Visar väderdata:");
             DataMethods.ShowWeatherData();
-            GoBackToMenu();
+            //GoBackToMenu();
+            Console.ReadKey();
         }
 
         private static void GoBackToMenu()
