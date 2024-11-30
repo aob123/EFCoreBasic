@@ -182,6 +182,32 @@ namespace EFCoreBasic
             }
         }
 
+        //Get all indoor average humidity by day
+        public static void AllIndoorAveragerHumidity()
+        {
+            using (var context = new EFContext())
+            {
+
+                var data = context.WeatherData
+                    .Where(d => d.Plats.Contains("Inne"))
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(group => new
+                    {
+                        group.Key.Date,
+                        AverageHumidity = group.Average(x => x.Luftfuktighet)
+                    })
+                    .OrderBy(d => d.AverageHumidity)
+                    .ToList();
+
+                foreach (var d in data)
+                {
+                    Console.WriteLine(d.Date + " " + d.AverageHumidity);
+                }
+
+                Console.ReadKey(true);
+            }
+        }
+
         //Get outdoor data
         public static void OutdoorData()
         {
@@ -275,6 +301,32 @@ namespace EFCoreBasic
                 foreach (var d in data)
                 {
                     Console.WriteLine(d.Date + " " + d.AverageTemp);
+                }
+
+                Console.ReadKey(true);
+            }
+        }
+
+        //Get all outdoor average humidity by day
+        public static void AllOutdoorAveragerHumidity()
+        {
+            using (var context = new EFContext())
+            {
+
+                var data = context.WeatherData
+                    .Where(d => d.Plats.Contains("Ute"))
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(group => new
+                    {
+                        group.Key.Date,
+                        AverageHumidity = group.Average(x => x.Luftfuktighet)
+                    })
+                    .OrderBy(d => d.AverageHumidity)
+                    .ToList();
+
+                foreach (var d in data)
+                {
+                    Console.WriteLine(d.Date + " " + d.AverageHumidity);
                 }
 
                 Console.ReadKey(true);
