@@ -121,35 +121,6 @@ namespace EFCoreBasic
             }
         }
 
-        /*public static void GetAverageTemperature(bool isIndoor)
-        {
-            using (var context = new EFContext())
-            {
-                // Hämta data baserat på om det är inne eller ute
-                var data = isIndoor
-                    ? context.WeatherData.Where(d => d.Plats.Contains("Inne"))
-                    : context.WeatherData.Where(d => d.Plats.Contains("Ute"));
-
-                // Gruppera efter datum och beräkna medeltemperatur för varje datum
-                var groupedData = data
-                    .GroupBy(d => d.Datum.Date)
-                    .Select(g => new
-                    {
-                        Date = g.Key,
-                        AverageTemp = g.Average(d => d.Temp)
-                    })
-                    .OrderBy(g => g.Date); // Sortera resultaten efter datum
-
-                // Visa resultaten
-                Console.WriteLine("Medeltemperaturer för varje dag:");
-                foreach (var item in groupedData)
-                {
-                    Console.WriteLine($"{item.Date:yyyy-MM-dd} | Medeltemperatur: {item.AverageTemp:F1}°C");
-                }
-            }
-        }*/
-
-
         public static void SortByTemperature(bool isIndoor)
         {
             using (var context = new EFContext())
@@ -182,67 +153,97 @@ namespace EFCoreBasic
             }
         }
 
-        /*public static void SortByMoldRisk(bool isIndoor)
-        {
-            using (var context = new EFContext())
-            {
-                var data = isIndoor
-                    ? context.WeatherData.Where(d => d.Plats.Contains("Inne"))
-                    : context.WeatherData.Where(d => d.Plats.Contains("Ute"));
-
-                var sortedData = data
-                    .Select(d => new
-                    {
-                        d.Datum,
-                        d.Plats,
-                        d.Temp,
-                        d.Luftfuktighet,
-                        MoldRisk = (d.Luftfuktighet - 78) * (d.Temp / 15)
-                    })
-                    .OrderBy(d => d.MoldRisk);
-
-                Console.WriteLine("Visar data sorterat efter mögelrisk:");
-                foreach (var item in sortedData)
-                {
-                    Console.WriteLine($"{item.Datum:yyyy-MM-dd} | {item.Plats} | {item.Temp}°C | {item.Luftfuktighet}% | Mögelrisk: {item.MoldRisk:F2}");
-                }
-            }
-        }*/
-
 
         /*public static void SortByMoldRisk(bool isIndoor)
-        {
-            using (var context = new EFContext())
-            {
-                var data = context.WeatherData
-                    .Where(d => d.Plats.Contains(isIndoor ? "Inomhus" : "Ute"))
-                    .GroupBy(d => d.Datum.Date)
-                    .Select(group => new
-                    {
-                        group.Key.Date,
-                        AverageTemp = group.Average(x => x.Temp),
-                        AverageHumidity = group.Average(x => x.Luftfuktighet),
-                        MoldRisk = CalculateMoldRisk((double)group.Average(x => x.Temp), (double)group.Average(x => x.Luftfuktighet))  // Konvertera till double
-                    })
-                    .OrderByDescending(d => d.MoldRisk)  // Sortera på mögelrisken
-                    .ToList();
-
-                foreach (var d in data)
-                {
-                    Console.WriteLine($"Datum: {d.Date} - Mögelrisk: {d.MoldRisk:F2} (Temp: {d.AverageTemp:F2}°C, Fuktighet: {d.AverageHumidity:F2}%)");
-                }
-
-                Console.WriteLine("\nTryck på en tangent för att fortsätta...");
-                Console.ReadKey();
-            }
-        }*/
-
-        public static void SortByMoldRisk(bool isIndoor)
         {
             using (var context = new EFContext())
             {
                 var data = context.WeatherData
                     .Where(w => w.Plats.Contains(isIndoor ? "Inomhus" : "Ute"))  // Bestäm plats baserat på inomhus eller utomhus
+                    .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        AverageTemp = g.Average(w => w.Temp),
+                        AverageHumidity = g.Average(w => w.Luftfuktighet)
+                    })
+                    .ToList();
+
+                // Lägger till för att kontrollera om data går in och visas
+                Console.WriteLine($"Antal inomhusdata: {data.Count}");
+
+                var sortedData = data
+                    .Select(d => new
+                    {
+                        d.Date,
+                        d.AverageTemp,
+                        d.AverageHumidity,
+                        MoldRisk = CalculateMoldRisk((double)d.AverageTemp, (double)d.AverageHumidity)
+
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera efter mögelrisk (störst risk först)
+                    .ToList();
+
+                Console.WriteLine("Sortering efter mögelrisk (störst till minst risk):");
+                foreach (var item in sortedData)
+                {
+                    Console.WriteLine($"{item.Date.ToShortDateString()} - Mögelrisk: {item.MoldRisk} (Temp: {item.AverageTemp}, Luftfuktighet: {item.AverageHumidity})");
+                }
+
+                Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
+                Console.ReadKey();
+            }
+        }*/
+
+        //Sort mold outdoor
+        public static void SortByMoldRiskOutdoors()
+        {
+            using (var context = new EFContext())
+            {
+                var data = context.WeatherData
+                    .Where(w => w.Plats.Contains("Ute"))  // Bestäm plats baserat på inomhus eller utomhus
+                    .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        AverageTemp = g.Average(w => w.Temp),
+                        AverageHumidity = g.Average(w => w.Luftfuktighet)
+                    })
+                    .ToList();
+
+                // Lägger till för att kontrollera om data går in och visas
+                Console.WriteLine($"Antal utomhusdata: {data.Count}");
+
+                var sortedData = data
+                    .Select(d => new
+                    {
+                        d.Date,
+                        d.AverageTemp,
+                        d.AverageHumidity,
+                        MoldRisk = CalculateMoldRisk((double)d.AverageTemp, (double)d.AverageHumidity)
+
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera efter mögelrisk (störst risk först)
+                    .ToList();
+
+                Console.WriteLine("Sortering efter mögelrisk (störst till minst risk):");
+                foreach (var item in sortedData)
+                {
+                    Console.WriteLine($"{item.Date.ToShortDateString()} - Mögelrisk: {item.MoldRisk} (Temp: {item.AverageTemp}, Luftfuktighet: {item.AverageHumidity})");
+                }
+
+                Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
+                Console.ReadKey();
+            }
+        }
+
+        //Sort mold outdoor
+        public static void SortByMoldRiskIndoor()
+        {
+            using (var context = new EFContext())
+            {
+                var data = context.WeatherData
+                    .Where(w => w.Plats.Contains("Inne"))  // Bestäm plats baserat på inomhus eller utomhus
                     .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
                     .Select(g => new
                     {

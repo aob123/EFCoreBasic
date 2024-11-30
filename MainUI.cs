@@ -71,7 +71,7 @@ namespace EFCoreBasic
                         Console.ReadKey();
                         break;
                     case "4":
-                        DataMethods.SortByMoldRisk(true);
+                        DataMethods.SortByMoldRiskIndoor();
                         Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
@@ -128,7 +128,7 @@ namespace EFCoreBasic
                         Console.ReadKey();
                         break;
                     case "6":
-                        DataMethods.SortByMoldRisk(false);
+                        DataMethods.SortByMoldRiskOutdoors();
                         Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
