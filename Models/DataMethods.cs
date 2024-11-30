@@ -252,6 +252,9 @@ namespace EFCoreBasic
                     })
                     .ToList();
 
+                // Lägger till för att kontrollera om data går in och visas
+                Console.WriteLine($"Antal inomhusdata: {data.Count}");
+
                 var sortedData = data
                     .Select(d => new
                     {
