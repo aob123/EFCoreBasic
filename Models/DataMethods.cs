@@ -91,6 +91,7 @@ namespace EFCoreBasic
             }
         }
 
+
         public static void GetAverageTemperature(bool isIndoor)
         {
             Console.WriteLine("Ange ett datum (yyyy-MM-dd):");
@@ -119,6 +120,35 @@ namespace EFCoreBasic
                 Console.WriteLine("Ogiltigt datumformat.");
             }
         }
+
+        /*public static void GetAverageTemperature(bool isIndoor)
+        {
+            using (var context = new EFContext())
+            {
+                // Hämta data baserat på om det är inne eller ute
+                var data = isIndoor
+                    ? context.WeatherData.Where(d => d.Plats.Contains("Inne"))
+                    : context.WeatherData.Where(d => d.Plats.Contains("Ute"));
+
+                // Gruppera efter datum och beräkna medeltemperatur för varje datum
+                var groupedData = data
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(g => new
+                    {
+                        Date = g.Key,
+                        AverageTemp = g.Average(d => d.Temp)
+                    })
+                    .OrderBy(g => g.Date); // Sortera resultaten efter datum
+
+                // Visa resultaten
+                Console.WriteLine("Medeltemperaturer för varje dag:");
+                foreach (var item in groupedData)
+                {
+                    Console.WriteLine($"{item.Date:yyyy-MM-dd} | Medeltemperatur: {item.AverageTemp:F1}°C");
+                }
+            }
+        }*/
+
 
         public static void SortByTemperature(bool isIndoor)
         {
@@ -179,7 +209,7 @@ namespace EFCoreBasic
             }
         }
 
-        public static void GetAutumnDate()
+        /*public static void GetAutumnDate()
         {
             using var context = new EFContext();
             var threshold = 10;
@@ -219,7 +249,45 @@ namespace EFCoreBasic
             {
                 Console.WriteLine("Ingen meteorologisk höst hittades.");
             }
+        }*/
+
+
+        public static void GetAutumnDate()
+        {
+            using var context = new EFContext();
+            var threshold = 10; // Tröskelvärde för höst
+
+            var dates = context.WeatherData
+                               .Where(w => w.Plats.Contains("Ute") && w.Temp < threshold)
+                               .OrderBy(w => w.Datum)
+                               .Select(w => w.Datum.Date)
+                               .Distinct()
+                               .ToList();
+
+            DateTime? autumnStart = null;
+            for (int i = 0; i <= dates.Count - 5; i++)
+            {
+                // Kontrollera om det finns 5 på varandra följande dagar
+                if (dates[i + 1] == dates[i].AddDays(1) &&
+                    dates[i + 2] == dates[i].AddDays(2) &&
+                    dates[i + 3] == dates[i].AddDays(3) &&
+                    dates[i + 4] == dates[i].AddDays(4))
+                {
+                    autumnStart = dates[i]; // Datumet för höstens start
+                    break;
+                }
+            }
+
+            if (autumnStart.HasValue)
+            {
+                Console.WriteLine($"Meteorologisk höst startade den: {autumnStart.Value:yyyy-MM-dd}");
+            }
+            else
+            {
+                Console.WriteLine("Ingen meteorologisk höst hittades.");
+            }
         }
+
 
         public static void GetWinterDate()
         {
