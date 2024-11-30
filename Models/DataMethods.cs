@@ -97,6 +97,7 @@ namespace EFCoreBasic
             }
         }
 
+        //Get sleected indoor average temperature
         public static void IndoorAverageTemp()
         {
             using (var context = new EFContext())
@@ -195,7 +196,89 @@ namespace EFCoreBasic
             }
         }
 
-        
-    }
+        //Get sleected outdoor average temperature
+        public static void OutdoorAverageTemp()
+        {
+            using (var context = new EFContext())
+            {
+                Console.Write("Please type in the number for the month that you'd like to use [October/November]: ");
+                int month = int.Parse(Console.ReadLine());
+                int endMonth = month;
+                if (month < 10 || month > 11)
+                {
+                    Console.WriteLine("Invalid input");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return;
+                }
 
+                Console.Write("Please type in the number for the day that you'd like to use [1-31/1-30]: ");
+                int day = int.Parse(Console.ReadLine());
+                int endDay = day + 1;
+                if (month == 10 && day > 31 || month == 11 && day > 30)
+                {
+                    Console.WriteLine("Invalid input");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return;
+                }
+                else if (month == 10 && day == 31)
+                {
+                    endDay = 1;
+                    endMonth = 11;
+                }
+
+                string monthString = month.ToString();
+                string dayString = day.ToString();
+                string endMonthString = endMonth.ToString();
+                string endDayString = endDay.ToString();
+                string chosenDate = "2016/" + monthString + "/" + dayString;
+                string chosenEndDate = "2016/" + endMonthString + "/" + endDayString;
+
+                var startDate = DateTime.ParseExact(chosenDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+                var endDate = DateTime.ParseExact(chosenEndDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+
+                var data = context.WeatherData.Where(d => d.Plats.Contains("Ute") && d.Datum >= startDate && d.Datum <= endDate).ToList();
+
+                decimal addedTemp = 0;
+                int counter = 0;
+
+                foreach (WeatherData d in data)
+                {
+                    addedTemp += d.Temp;
+                    counter++;
+                }
+
+                decimal mediumTemp = addedTemp / counter;
+                Console.WriteLine("Medeltemperaturen för " + chosenDate + " är " + mediumTemp);
+                Console.ReadKey();
+            }
+        }
+
+        //Get all outdoor average temperatures by day
+        public static void AllOutdoorAverageTemp()
+        {
+            using (var context = new EFContext())
+            {
+
+                var data = context.WeatherData
+                    .Where(d => d.Plats.Contains("Ute"))
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(group => new
+                    {
+                        group.Key.Date,
+                        AverageTemp = group.Average(x => x.Temp)
+                    })
+                    .OrderByDescending(d => d.AverageTemp)
+                    .ToList();
+
+                foreach (var d in data)
+                {
+                    Console.WriteLine(d.Date + " " + d.AverageTemp);
+                }
+
+                Console.ReadKey(true);
+            }
+        }
+    }
 }
