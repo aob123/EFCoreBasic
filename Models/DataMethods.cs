@@ -182,7 +182,7 @@ namespace EFCoreBasic
             }
         }
 
-        public static void SortByMoldRisk(bool isIndoor)
+        /*public static void SortByMoldRisk(bool isIndoor)
         {
             using (var context = new EFContext())
             {
@@ -207,131 +207,86 @@ namespace EFCoreBasic
                     Console.WriteLine($"{item.Datum:yyyy-MM-dd} | {item.Plats} | {item.Temp}°C | {item.Luftfuktighet}% | Mögelrisk: {item.MoldRisk:F2}");
                 }
             }
-        }
-
-        /*public static void GetAutumnDate()
-        {
-            using var context = new EFContext();
-            var threshold = 10;
-
-            var dates = context.WeatherData
-                               .Where(w => w.Plats.Contains("Ute") && w.Temp < threshold)
-                               .OrderBy(w => w.Datum)
-                               .Select(w => w.Datum.Date)
-                               .Distinct()
-                               .ToList();
-
-            DateTime? autumnStart = null;
-            for (int i = 0; i <= dates.Count - 5; i++)
-            {
-                bool consecutive = true;
-                for (int j = 0; j < 5; j++)
-                {
-                    if (dates[i + j].AddDays(j) != dates[i + j])
-                    {
-                        consecutive = false;
-                        break;
-                    }
-                }
-
-                if (consecutive)
-                {
-                    autumnStart = dates[i];
-                    break;
-                }
-            }
-
-            if (autumnStart.HasValue)
-            {
-                Console.WriteLine($"Meteorologisk höst startade den: {autumnStart.Value:yyyy-MM-dd}");
-            }
-            else
-            {
-                Console.WriteLine("Ingen meteorologisk höst hittades.");
-            }
         }*/
 
 
-        public static void GetAutumnDate()
+        /*public static void SortByMoldRisk(bool isIndoor)
         {
-            using var context = new EFContext();
-            var threshold = 10; // Tröskelvärde för höst
-
-            var dates = context.WeatherData
-                               .Where(w => w.Plats.Contains("Ute") && w.Temp < threshold)
-                               .OrderBy(w => w.Datum)
-                               .Select(w => w.Datum.Date)
-                               .Distinct()
-                               .ToList();
-
-            DateTime? autumnStart = null;
-            for (int i = 0; i <= dates.Count - 5; i++)
+            using (var context = new EFContext())
             {
-                // Kontrollera om det finns 5 på varandra följande dagar
-                if (dates[i + 1] == dates[i].AddDays(1) &&
-                    dates[i + 2] == dates[i].AddDays(2) &&
-                    dates[i + 3] == dates[i].AddDays(3) &&
-                    dates[i + 4] == dates[i].AddDays(4))
-                {
-                    autumnStart = dates[i]; // Datumet för höstens start
-                    break;
-                }
-            }
-
-            if (autumnStart.HasValue)
-            {
-                Console.WriteLine($"Meteorologisk höst startade den: {autumnStart.Value:yyyy-MM-dd}");
-            }
-            else
-            {
-                Console.WriteLine("Ingen meteorologisk höst hittades.");
-            }
-        }
-
-
-        public static void GetWinterDate()
-        {
-            using var context = new EFContext();
-            var threshold = 0;
-
-            var dates = context.WeatherData
-                               .Where(w => w.Plats.Contains("Ute") && w.Temp < threshold)
-                               .OrderBy(w => w.Datum)
-                               .Select(w => w.Datum.Date)
-                               .Distinct()
-                               .ToList();
-
-            DateTime? winterStart = null;
-            for (int i = 0; i <= dates.Count - 5; i++)
-            {
-                bool consecutive = true;
-                for (int j = 0; j < 5; j++)
-                {
-                    if (dates[i + j].AddDays(j) != dates[i + j])
+                var data = context.WeatherData
+                    .Where(d => d.Plats.Contains(isIndoor ? "Inomhus" : "Ute"))
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(group => new
                     {
-                        consecutive = false;
-                        break;
-                    }
-                }
+                        group.Key.Date,
+                        AverageTemp = group.Average(x => x.Temp),
+                        AverageHumidity = group.Average(x => x.Luftfuktighet),
+                        MoldRisk = CalculateMoldRisk((double)group.Average(x => x.Temp), (double)group.Average(x => x.Luftfuktighet))  // Konvertera till double
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera på mögelrisken
+                    .ToList();
 
-                if (consecutive)
+                foreach (var d in data)
                 {
-                    winterStart = dates[i];
-                    break;
+                    Console.WriteLine($"Datum: {d.Date} - Mögelrisk: {d.MoldRisk:F2} (Temp: {d.AverageTemp:F2}°C, Fuktighet: {d.AverageHumidity:F2}%)");
                 }
-            }
 
-            if (winterStart.HasValue)
-            {
-                Console.WriteLine($"Meteorologisk vinter startade den: {winterStart.Value:yyyy-MM-dd}");
+                Console.WriteLine("\nTryck på en tangent för att fortsätta...");
+                Console.ReadKey();
             }
-            else
+        }*/
+
+        public static void SortByMoldRisk(bool isIndoor)
+        {
+            using (var context = new EFContext())
             {
-                Console.WriteLine("Ingen meteorologisk vinter hittades.");
+                var data = context.WeatherData
+                    .Where(w => w.Plats.Contains(isIndoor ? "Inomhus" : "Ute"))  // Bestäm plats baserat på inomhus eller utomhus
+                    .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        AverageTemp = g.Average(w => w.Temp),
+                        AverageHumidity = g.Average(w => w.Luftfuktighet)
+                    })
+                    .ToList();
+
+                var sortedData = data
+                    .Select(d => new
+                    {
+                        d.Date,
+                        d.AverageTemp,
+                        d.AverageHumidity,
+                        MoldRisk = CalculateMoldRisk((double)d.AverageTemp, (double)d.AverageHumidity)
+
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera efter mögelrisk (störst risk först)
+                    .ToList();
+
+                Console.WriteLine("Sortering efter mögelrisk (störst till minst risk):");
+                foreach (var item in sortedData)
+                {
+                    Console.WriteLine($"{item.Date.ToShortDateString()} - Mögelrisk: {item.MoldRisk} (Temp: {item.AverageTemp}, Luftfuktighet: {item.AverageHumidity})");
+                }
+
+                Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
+                Console.ReadKey();
             }
         }
 
-        /*public static void IndoorData()
+
+        private static double CalculateMoldRisk(double temperature, double humidity)
+        {
+            if (humidity >= 70 && temperature >= 0 && temperature <= 30)
+            {
+                return (humidity - 70) * 0.1 + (temperature - 0) * 0.2;  // Skala risken
+            }
+            return 0;
+        }
+
+
+        public static void IndoorData()
         {
             using (var context = new EFContext())
             {
@@ -345,21 +300,6 @@ namespace EFCoreBasic
             }
         }
 
-        public static void OutdoorData()
-        {
-            using (var context = new EFContext())
-            {
-                // Hämta väderdata för utomhus (Plats innehåller "Ute")
-                var data = context.WeatherData.Where(d => d.Plats.Contains("Ute")).ToList();
-
-                foreach (var d in data)
-                {
-                    Console.WriteLine($"{d.Datum:yyyy-MM-dd} | {d.Plats} | {d.Temp}°C | {d.Luftfuktighet}%");
-                }
-            }
-        }*/
-
-        //Get outdoor data
         public static void OutdoorData()
         {
             using (var context = new EFContext())

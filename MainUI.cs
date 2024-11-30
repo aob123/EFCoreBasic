@@ -47,8 +47,8 @@ namespace EFCoreBasic
                 Console.Clear();
                 Console.WriteLine("Inomhusmeny:");
                 Console.WriteLine("1. Medeltemperatur för valt datum");
-                Console.WriteLine("2. Sortering: Varmaste till kallaste dagen");
-                Console.WriteLine("3. Sortering: Torraste till fuktigaste dagen");
+                Console.WriteLine("2. Medeltemperaturer per dag");
+                Console.WriteLine("3. Medelluftfuktighet per dag");
                 Console.WriteLine("4. Sortering: Minst till störst risk för mögel");
                 Console.WriteLine("5. Tillbaka till huvudmenyn");
                 Console.Write("Välj ett alternativ: ");
@@ -56,19 +56,23 @@ namespace EFCoreBasic
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        DataMethods.GetAverageTemperature(true);
+                        DataMethods.GetAverageTemperature(true);  // true för inomhus
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "2":
-                        DataMethods.SortByTemperature(true);
+                        DataMethods.AllIndoorAverageTemp();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "3":
-                        DataMethods.SortByHumidity(true);
+                        DataMethods.AllIndoorAveragerHumidity();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "4":
                         DataMethods.SortByMoldRisk(true);
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "5":
@@ -88,38 +92,44 @@ namespace EFCoreBasic
                 Console.Clear();
                 Console.WriteLine("Utomhusmeny:");
                 Console.WriteLine("1. Medeltemperatur för valt datum");
-                Console.WriteLine("2. Sortering: Varmaste till kallaste dagen");
-                Console.WriteLine("3. Sortering: Torraste till fuktigaste dagen");
-                Console.WriteLine("4. Sortering: Minst till störst risk för mögel");
-                Console.WriteLine("5. Datum för meteorologisk höst");
-                Console.WriteLine("6. Datum för meteorologisk vinter");
+                Console.WriteLine("2. Medeltemperaturer per dag");
+                Console.WriteLine("3. Medelluftfuktighet per dag");
+                Console.WriteLine("4. Meteorologisk höst");
+                Console.WriteLine("5. Meteorologisk vinter");
+                Console.WriteLine("6. Sortering: Minst till störst risk för mögel");
                 Console.WriteLine("7. Tillbaka till huvudmenyn");
                 Console.Write("Välj ett alternativ: ");
 
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        DataMethods.GetAverageTemperature(false);
+                        DataMethods.GetAverageTemperature(false);  // false för utomhus
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "2":
-                        DataMethods.SortByTemperature(false);
+                        DataMethods.AllOutdoorAverageTemp();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "3":
-                        DataMethods.SortByHumidity(false);
+                        DataMethods.AllOutdoorAveragerHumidity();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "4":
-                        DataMethods.SortByMoldRisk(false);
+                        DataMethods.DateForFall();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "5":
-                        DataMethods.GetAutumnDate();
+                        DataMethods.DateForWinter();
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "6":
-                        DataMethods.GetWinterDate();
+                        DataMethods.SortByMoldRisk(false);
+                        Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
                         Console.ReadKey();
                         break;
                     case "7":
@@ -137,24 +147,6 @@ namespace EFCoreBasic
             Console.Clear();
             Console.WriteLine("Avslutar programmet...");
             Environment.Exit(0);
-        }
-
-
-
-        private static void ShowWeatherData()
-        {
-            Console.Clear();
-            Console.WriteLine("Visar väderdata:");
-            DataMethods.ShowWeatherData();
-            //GoBackToMenu();
-            Console.ReadKey();
-        }
-
-        private static void GoBackToMenu()
-        {
-            Console.WriteLine("Tryck på en tangent för att gå tillbaka till huvudmenyn...");
-            Console.ReadKey();
-            ShowMainMenu();
         }
     }
 }
