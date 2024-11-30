@@ -2,6 +2,8 @@ using EFCOREBASIC.Models;
 using CsvHelper;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
 namespace EFCoreBasic
 {
 
@@ -153,122 +155,31 @@ namespace EFCoreBasic
             }
         }
 
-        //Doesn't work...
         public static void AllIndoorMediumTemp()
         {
             using (var context = new EFContext())
             {
-                var startDateRange = DateTime.ParseExact("2016/10/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
-                var endDateRange = DateTime.ParseExact("2016/11/30", "yyyy/MM/dd", CultureInfo.InvariantCulture);
 
-                var data = context.WeatherData.Where(d => d.Plats.Contains("Inne") &&
-                    d.Datum >= startDateRange && d.Datum <= endDateRange).ToList();
+                var data = context.WeatherData
+                    .Where(d => d.Plats.Contains("Inne"))
+                    .GroupBy(d => d.Datum.Date)
+                    .Select(group => new
+                    {
+                        group.Key.Date
+                    })
+                    .OrderBy(d => d.Date)
+                    .ToList();
 
-                decimal addedTemp = 0;
-                int counter = 0;
-                int startDayCounter = 1;
-                int endDayCounter = 2;
-                string startDayCounterString;
-                string endDayCounterString;
-                string startMonthString = "10";
-                string endMonthString = "10";
-                string startDateString;
-                string endDateString;
-
-                foreach (WeatherData d in data)
+                foreach (var d in data)
                 {
-                    if (endDayCounter < 10)
-                    {
-                        endDayCounterString = "0" + endDayCounter.ToString();
-
-                        if (startDayCounter < 10)
-                        {
-                            startDayCounterString = "0" + startDayCounter.ToString();
-                        }
-                        else
-                        {
-                            startDayCounterString = startDayCounter.ToString();
-                        }
-                    }
-                    else
-                    {
-                        endDayCounterString = endDayCounter.ToString();
-
-                        if (startDayCounter < 10)
-                        {
-                            startDayCounterString = "0" + startDayCounter.ToString();
-                        }
-                        else
-                        {
-                            startDayCounterString = startDayCounter.ToString();
-                        }
-                    }
-
-                    startDateString = "2016/" + startMonthString + "/" + startDayCounterString;
-                    endDateString = "2016/" + endMonthString + "/" + endDayCounterString;
-
-                    var startDate = DateTime.ParseExact(startDateString, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-                    var endDate = DateTime.ParseExact(endDateString, "yyyy/MM/dd", CultureInfo.InvariantCulture);
-
-                    string dateString = d.Datum.ToString();
-                    string dateSubstring = dateString.Substring(0,10);
-                    string compareDateString = "2016-" + startMonthString + "-" + startDayCounterString;
-                    bool noMatchingDates = false;
-
-                    if (dateSubstring != compareDateString)
-                    {
-                        noMatchingDates = true;
-
-                        if (dateSubstring == "2016-10-18")
-                        {
-                            noMatchingDates = false;
-                        }
-                    }
-
-                    if (noMatchingDates == true)
-                    {
-                        continue;
-                    }
-
-                    var newData = context.WeatherData.Where(b => b.Plats.Contains("Inne") && 
-                    b.Datum >= startDate && b.Datum <= endDate).ToList();
-
-                    foreach (WeatherData b in newData)
-                    {
-                        addedTemp += b.Temp;
-                        counter++;
-                    }
-
-                    decimal mediumTemp = addedTemp / counter;
-                    Console.WriteLine(startDateString + " " + mediumTemp);
-                    Console.WriteLine(counter);
-
-                    addedTemp = 0;
-                    counter = 0;
-                    mediumTemp = 0;
-
-                    if (startDayCounter == 31)
-                    {
-                        startDayCounter = 1;
-                        endDayCounter++;
-                        startMonthString = "11";
-                    }
-                    else if (endDayCounter == 31)
-                    {
-                        startDayCounter++;
-                        endDayCounter = 1;
-                        endMonthString = "11";
-                    }
-                    else
-                    {
-                        startDayCounter++;
-                        endDayCounter++;
-                    }
+                    Console.WriteLine(d.Date);
                 }
 
-                Console.ReadKey();
+                Console.ReadKey(true);
             }
         }
+
+
 
         //Get outdoor data
         public static void OutdoorData()
