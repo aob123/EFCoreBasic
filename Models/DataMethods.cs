@@ -97,7 +97,7 @@ namespace EFCoreBasic
             }
         }
 
-        public static void IndoorMediumTemp()
+        public static void IndoorAverageTemp()
         {
             using (var context = new EFContext())
             {
@@ -155,7 +155,8 @@ namespace EFCoreBasic
             }
         }
 
-        public static void AllIndoorMediumTemp()
+        //Get all indoor average temperatures by day
+        public static void AllIndoorAverageTemp()
         {
             using (var context = new EFContext())
             {
@@ -165,21 +166,20 @@ namespace EFCoreBasic
                     .GroupBy(d => d.Datum.Date)
                     .Select(group => new
                     {
-                        group.Key.Date
+                        group.Key.Date,
+                        AverageTemp = group.Average(x => x.Temp)
                     })
-                    .OrderBy(d => d.Date)
+                    .OrderByDescending(d => d.AverageTemp)
                     .ToList();
 
                 foreach (var d in data)
                 {
-                    Console.WriteLine(d.Date);
+                    Console.WriteLine(d.Date + " " + d.AverageTemp);
                 }
 
                 Console.ReadKey(true);
             }
         }
-
-
 
         //Get outdoor data
         public static void OutdoorData()
