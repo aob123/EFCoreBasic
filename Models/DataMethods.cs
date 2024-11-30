@@ -423,5 +423,99 @@ namespace EFCoreBasic
                 Console.ReadKey();
             }
         }
+
+        //Sort mold outdoor
+        public static void SortByMoldRiskOutdoors()
+        {
+            using (var context = new EFContext())
+            {
+                var data = context.WeatherData
+                    .Where(w => w.Plats.Contains("Ute"))  // Bestäm plats baserat på inomhus eller utomhus
+                    .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        AverageTemp = g.Average(w => w.Temp),
+                        AverageHumidity = g.Average(w => w.Luftfuktighet)
+                    })
+                    .ToList();
+
+                // Lägger till för att kontrollera om data går in och visas
+                Console.WriteLine($"Antal inomhusdata: {data.Count}");
+
+                var sortedData = data
+                    .Select(d => new
+                    {
+                        d.Date,
+                        d.AverageTemp,
+                        d.AverageHumidity,
+                        MoldRisk = CalculateMoldRisk((double)d.AverageTemp, (double)d.AverageHumidity)
+
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera efter mögelrisk (störst risk först)
+                    .ToList();
+
+                Console.WriteLine("Sortering efter mögelrisk (störst till minst risk):");
+                foreach (var item in sortedData)
+                {
+                    Console.WriteLine($"{item.Date.ToShortDateString()} - Mögelrisk: {item.MoldRisk} (Temp: {item.AverageTemp}, Luftfuktighet: {item.AverageHumidity})");
+                }
+
+                Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
+                Console.ReadKey();
+            }
+        }
+
+        //Sort mold outdoor
+        public static void SortByMoldRiskIndoor()
+        {
+            using (var context = new EFContext())
+            {
+                var data = context.WeatherData
+                    .Where(w => w.Plats.Contains("Inne"))  // Bestäm plats baserat på inomhus eller utomhus
+                    .GroupBy(w => w.Datum.Date)  // Gruppera efter datum
+                    .Select(g => new
+                    {
+                        Date = g.Key.Date,
+                        AverageTemp = g.Average(w => w.Temp),
+                        AverageHumidity = g.Average(w => w.Luftfuktighet)
+                    })
+                    .ToList();
+
+                // Lägger till för att kontrollera om data går in och visas
+                Console.WriteLine($"Antal inomhusdata: {data.Count}");
+
+                var sortedData = data
+                    .Select(d => new
+                    {
+                        d.Date,
+                        d.AverageTemp,
+                        d.AverageHumidity,
+                        MoldRisk = CalculateMoldRisk((double)d.AverageTemp, (double)d.AverageHumidity)
+
+                    })
+                    .OrderByDescending(d => d.MoldRisk)  // Sortera efter mögelrisk (störst risk först)
+                    .ToList();
+
+                Console.WriteLine("Sortering efter mögelrisk (störst till minst risk):");
+                foreach (var item in sortedData)
+                {
+                    Console.WriteLine($"{item.Date.ToShortDateString()} - Mögelrisk: {item.MoldRisk} (Temp: {item.AverageTemp}, Luftfuktighet: {item.AverageHumidity})");
+                }
+
+                Console.WriteLine("\nTryck på en tangent för att återgå till menyn...");
+                Console.ReadKey();
+            }
+        }
+
+        //CalculateMold
+        private static double CalculateMoldRisk(double temperature, double humidity)
+        {
+            if (humidity >= 70 && temperature >= 0 && temperature <= 30)
+            {
+                return (humidity - 70) * 0.1 + (temperature - 0) * 0.2;  // Skala risken
+            }
+            return 0;
+        }
     }
 }
